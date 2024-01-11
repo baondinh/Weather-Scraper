@@ -11,17 +11,15 @@ def get_weather_forecast(zip_code):
     soup = BeautifulSoup(response.content, "html.parser")
 
     forecast_container = soup.find("div", class_=(re.compile("DailyForecast--DisclosureList")))
-    # for items in forecast_container: 
-    #     try: 
-    #         print(items)
-    #     except: 
-    #         print("Error")
 
-    return forecast_container.prettify()
+    for detail in forecast_container.find_all("details"):
+        print(detail.find("div", class_=(re.compile("DetailsSummary"))).text)
+
 
 if __name__ == "__main__":
     zip_code = input("Enter 5-digit zip code: ")
-    try: 
+    try:
         print(get_weather_forecast(zip_code))
-    except: 
+    except:
+        print("Error")
         sys.exit()
