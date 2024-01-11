@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import re
+import sys
 
 def get_weather_forecast(zip_code):
     url = f"https://weather.com/weather/tenday/l/{zip_code}"
@@ -10,14 +11,17 @@ def get_weather_forecast(zip_code):
     soup = BeautifulSoup(response.content, "html.parser")
 
     forecast_container = soup.find("div", class_=(re.compile("DailyForecast--DisclosureList")))
-    for items in forecast_container: 
-        try: 
-            print(items)
-        except: 
-            print("Error")
+    # for items in forecast_container: 
+    #     try: 
+    #         print(items)
+    #     except: 
+    #         print("Error")
 
-    return forecast_container
+    return forecast_container.prettify()
 
 if __name__ == "__main__":
     zip_code = input("Enter 5-digit zip code: ")
-    print(get_weather_forecast(zip_code))
+    try: 
+        print(get_weather_forecast(zip_code))
+    except: 
+        sys.exit()
