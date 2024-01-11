@@ -10,7 +10,12 @@ def get_weather_forecast(zip_code):
     soup = BeautifulSoup(response.content, "html.parser")
 
     forecast_container = soup.find("div", class_=(re.compile("DailyForecast--DisclosureList")))
-   
+    for items in forecast_container: 
+        try: 
+            print(items)
+        except: 
+            print("Error")
+
     return forecast_container
 
 if __name__ == "__main__":
