@@ -1,5 +1,8 @@
 import re
 import sys
+import csv
+import matplotlib.pyplot as plt
+import numpy as np
 
 """
     Splits a weather forecast line into components using regex.
@@ -46,3 +49,50 @@ def write_weather_csv(weather_data, file_name):
                 f'{day["date"]},{day["condition"]},{high},{low},'
                 f'{day["wind"]}\n'
             )
+
+"""  
+    Generates matplotlib plots of temperature data stored in CSV file created with write_weather_csv()
+    """
+def generate_weather_plot(csv_file):
+    highs = []
+    lows = []
+    dates = []
+
+    # Open CSV and extract temperature data
+    with open(csv_file, 'rb') as f:
+        lines = f.readlines()
+        reader = csv.reader([line.decode('utf-8', 'ignore') for line in lines])
+        next(reader)
+        
+        for row in reader:
+            dates.append(row[0])
+            try:
+                highs.append(int(row[2]))
+                lows.append(int(row[3]))
+            except ValueError:
+                highs.append(None)
+                lows.append(None)
+
+    # Generate line graphs for temperature data and show plot        
+    plt.plot(dates, highs, color='red')
+    plt.plot(dates, lows, color='blue')
+    plt.plot(dates, highs, 'o', color='red', label='High') 
+    plt.plot(dates, lows, 'o', color='blue', label='Low')
+    plt.legend()
+    plt.ylim(0, 100)
+    plt.yticks(np.arange(0, 100, 10))
+    plt.ylabel('Temperature (°F)')
+    plt.title('Daily High and Low Temperatures')
+    plt.tight_layout()
+    plt.xticks(rotation=45)
+    plt.fill_between(dates, highs, lows, 
+                    facecolor='plum', alpha=0.5)
+
+    offset = 5
+    for i in range(len(dates)): 
+        plt.annotate(f"{highs[i]}°", xy = (dates[i],highs[i] + offset))
+        plt.annotate(f"{lows[i]}°", xy = (dates[i],lows[i] - offset))
+
+    plt.show()
+    print('Graph generated with temperature axes fixes!')
+
