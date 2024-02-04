@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import re
 import sys
 import forecast_parser as fp
+from datetime import datetime
 
 def get_weather_forecast(zip_code):
     url = f"https://weather.com/weather/tenday/l/{zip_code}"
@@ -21,15 +22,19 @@ def get_weather_forecast(zip_code):
 
 if __name__ == "__main__":
     zip_code = input("Enter 5-digit zip code: ")
+    today = datetime.now() # current date and time
     try:
-        forecast = get_weather_forecast(zip_code)
-        parsed_data = fp.split_weather_line(forecast)
-        for line in parsed_data: 
-            print(line)
+        forecasts = get_weather_forecast(zip_code)
+
+        # Append parsed forecast data to a list
+        parsed_list = []
+        for forecast in forecasts: 
+            parsed_data = fp.split_weather_line(forecast)
+            parsed_list.append(parsed_data)
 
         #Store data in a custom CSV file
-        file_name = f"weather_{zip_code}.csv"
-        fp.write_weather_csv(parsed_data, file_name)
+        file_name = f"weather_{zip_code}_{today.strftime("%m%d%Y")}.csv"
+        fp.write_weather_csv(parsed_list, file_name)
         print(f"Forecast data stored to {file_name}")
     except:
         print("Error")
