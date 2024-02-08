@@ -1,1 +1,7 @@
+Practice Web Scraping using Python 
 
+Given a user input zip code, extract multi-day weather forecast for that given zip code from weather.com HTML. 
+Relevant forecast data is stored in single-line strings for each day and stored in a list. 
+Using regex, parse the forecast strings into date, condition, temperature, and wind data and write to a CSV file. 
+
+There is a separate function that reads the CSV file and generates a matplotlib scatter plot from the temperature data. 
