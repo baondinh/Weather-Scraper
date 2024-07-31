@@ -15,7 +15,7 @@ import sys
     """
 def split_weather_line(forecast):
     lst = []
-    for line in lines:
+    for line in forecast:
         # Regular expressions for each component
         date_pattern = r"^Today|^Tonight|^\D{3} \d{1,2}"
         wind_pattern = r"(?<=Wind)(\w{1,3}\d{1,2})mph" # Match "Wind", 1-3 letter direction, 1-2 digit speed
