@@ -78,6 +78,7 @@ def get_weather_forecast(zip_code):
         forecasts.append(forecast_text)
     return forecasts
 
+
 def analyze_weather_data(df):
     print("\nData Analysis:")
     print(df.describe())
@@ -85,36 +86,49 @@ def analyze_weather_data(df):
     print("\nCorrelation Matrix:")
     correlation_matrix = df[['high_temp', 'low_temp', 'wind_speed', 'rain_chance']].corr()
     print(correlation_matrix)
-
-    # Plotting temperature range
-    plt.figure(figsize=(10, 6))
-    plt.plot(df['date'], df['high_temp'], label='High Temp')
-    plt.plot(df['date'], df['low_temp'], label='Low Temp')
+    
+    # Plotting temperature range with shaded area and grid
+    plt.figure(figsize=(12, 6))
+    plt.plot(df['date'], df['high_temp'], label='High Temp', color='red')
+    plt.plot(df['date'], df['low_temp'], label='Low Temp', color='blue')
+    plt.fill_between(df['date'], df['high_temp'], df['low_temp'], alpha=0.2)
     plt.title('Temperature Range Over Time')
     plt.xlabel('Date')
     plt.ylabel('Temperature (°F)')
     plt.legend()
+    plt.grid(True, linestyle='--', alpha=0.7)
     plt.xticks(rotation=45)
     plt.tight_layout()
-    plt.show()
+    
+    # Save the plot as an image with dynamic filename
+    plot_filename = f"temperature_plot_{zip_code}_{datetime.now().strftime('%Y%m%d')}.png"
+    plt.savefig(plot_filename)
+    plt.close()
+    
+    return plot_filename
 
 if __name__ == "__main__":
     zip_code = input("Enter 5-digit zip code: ")
     try:
         forecasts = get_weather_forecast(zip_code)
         parsed_forecasts = split_weather_line(forecasts)
-
+        
+        # Create DataFrame
         df = pd.DataFrame(parsed_forecasts)
-
+        
+        # Display DataFrame
         print("\nWeather Forecast DataFrame:")
         print(df)
-
-        analyze_weather_data(df)
         
-        # Save to CSV
-        csv_filename = f"weather_forecast_{zip_code}.csv"
+        # Analyze data and get plot filename
+        plot_filename = analyze_weather_data(df)
+        
+        # Save to CSV with dynamic filename
+        current_date = datetime.now().strftime("%Y%m%d")
+        csv_filename = f"weather_forecast_{zip_code}_{current_date}.csv"
         df.to_csv(csv_filename, index=False)
         print(f"\nData saved to {csv_filename}")
+        print(f"Plot saved as {plot_filename}")
         
     except Exception as e:
         print(f"Error: {str(e)}")
