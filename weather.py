@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import pandas as pd
+import matplotlib.pyplot as plt
 
 def split_weather_line(forecasts):
     # Patterns defined outside loop for efficiency
@@ -84,6 +85,18 @@ def analyze_weather_data(df):
     print("\nCorrelation Matrix:")
     correlation_matrix = df[['high_temp', 'low_temp', 'wind_speed', 'rain_chance']].corr()
     print(correlation_matrix)
+
+    # Plotting temperature range
+    plt.figure(figsize=(10, 6))
+    plt.plot(df['date'], df['high_temp'], label='High Temp')
+    plt.plot(df['date'], df['low_temp'], label='Low Temp')
+    plt.title('Temperature Range Over Time')
+    plt.xlabel('Date')
+    plt.ylabel('Temperature (°F)')
+    plt.legend()
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
 
 if __name__ == "__main__":
     zip_code = input("Enter 5-digit zip code: ")
