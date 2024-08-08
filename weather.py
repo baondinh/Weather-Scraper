@@ -77,6 +77,14 @@ def get_weather_forecast(zip_code):
         forecasts.append(forecast_text)
     return forecasts
 
+def analyze_weather_data(df):
+    print("\nData Analysis:")
+    print(df.describe())
+    
+    print("\nCorrelation Matrix:")
+    correlation_matrix = df[['high_temp', 'low_temp', 'wind_speed', 'rain_chance']].corr()
+    print(correlation_matrix)
+
 if __name__ == "__main__":
     zip_code = input("Enter 5-digit zip code: ")
     try:
@@ -88,6 +96,8 @@ if __name__ == "__main__":
         print("\nWeather Forecast DataFrame:")
         print(df)
 
+        analyze_weather_data(df)
+        
         # Save to CSV
         csv_filename = f"weather_forecast_{zip_code}.csv"
         df.to_csv(csv_filename, index=False)
