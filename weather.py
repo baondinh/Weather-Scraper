@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import re
+import pandas as pd
 
 def split_weather_line(forecasts):
     # Patterns defined outside loop for efficiency
@@ -81,7 +82,16 @@ if __name__ == "__main__":
     try:
         forecasts = get_weather_forecast(zip_code)
         parsed_forecasts = split_weather_line(forecasts)
-        for forecast in parsed_forecasts:
-            print(forecast)
+
+        df = pd.DataFrame(parsed_forecasts)
+
+        print("\nWeather Forecast DataFrame:")
+        print(df)
+
+        # Save to CSV
+        csv_filename = f"weather_forecast_{zip_code}.csv"
+        df.to_csv(csv_filename, index=False)
+        print(f"\nData saved to {csv_filename}")
+        
     except Exception as e:
         print(f"Error: {str(e)}")
