@@ -1,26 +1,77 @@
+#!/usr/bin/env python
+'''
+Weather scraping script that extracts "ten day" weather forecasts for a given ZIP code from weather.com
+Combines and improves upon functions found in both `forecast_parser.py` and `weather_scraper.py`
+
+'''
+
 import requests
 from bs4 import BeautifulSoup
 import re
 import pandas as pd
 import matplotlib.pyplot as plt
 
+__author__ = "Bao Dinh"
+__version__ = "1.0.1"
+__maintainer__ = "Bao Dinh"
+__email__ = "baondinh@bu.edu"
+
+def get_weather_forecast(zip_code):
+    """
+    Retrieves weather forecast for a given zip code from weather.com.
+
+    Args:
+        zip_code (str): 5-digit zip code.
+
+    Returns:
+        forecasts (list): A list of strings representing the weather forecast for each day.
+    """
+    
+    url = f"https://weather.com/weather/tenday/l/{zip_code}"
+    response = requests.get(url)
+    response.raise_for_status()  # Raise an exception for bad status codes
+
+    soup = BeautifulSoup(response.content, "html.parser")
+
+    forecast_container = soup.find("div", class_=(re.compile("DailyForecast--DisclosureList")))
+
+    forecasts = []
+    for detail in forecast_container.find_all("details"):
+        forecast_text = detail.find("div", class_=(re.compile("DetailsSummary"))).text
+        forecasts.append(forecast_text)
+    return forecasts
+
 def split_weather_line(forecasts):
-    # Patterns defined outside loop for efficiency
+    """
+    Uses regex to extract weather data from string forecasts returned by `get_weather_forecast()`
+
+    Args:
+        forecasts (lst): A list of strings representing the weather forecast for each day.
+
+    Returns:
+        results (list): A list of dictionaries with weather information for daily forecasts.
+    """
+    
+    # Weather options for use with f-string regex
     wind_direction_options = "N|NNE|NE|ENE|E|ESE|SE|SSE|S|SSW|SW|WSW|W|WNW|NW|NNW"
     condition_options = "Mostly Sunny|Sunny|Partly Cloudy|Mostly Cloudy|Scattered Showers|Few Showers|Showers|Light Rain|Rain and Snow|Rain|Snow|Thunderstorms|Scattered Thunderstorms|Thunderstorms Early"
 
+    # First split of forecast data into broader weather data categories
     date_pattern = r"^Today|^Tonight|^\D{3} \d{1,2}"
     wind_pattern = fr"Wind({wind_direction_options})\s{{0,1}}(\d{{1,2}})\s{{0,1}}mph"
     condition_pattern = fr"({condition_options})"
     temp_pattern = r"\d{1,3}°/\d{1,3}°|--/\d{1,3}°"
 
     results = []
+
+    # For each line in forecasts list (daily forecasts), create a dictionary of separated weather data
     for line in forecasts:
         date_match = re.search(date_pattern, line)
         condition_match = re.search(condition_pattern, line)
         temp_match = re.search(temp_pattern, line)
         wind_match = re.search(wind_pattern, line)
 
+        # Second split of forecast data
         if all([date_match, condition_match, temp_match, wind_match]):
             # Temperature parsing
             temp_str = temp_match.group(0)
@@ -54,32 +105,17 @@ def split_weather_line(forecasts):
 
     return results
 
-def get_weather_forecast(zip_code):
+def analyze_weather_data(df):
     """
-    Retrieves weather forecast for a given zip code from weather.com.
+    Analyzes numerical weather data and generates a line graph of high/low temperatures from a DataFrame of the weather data.
 
     Args:
-        zip_code (str): 5-digit zip code.
-
+        df (DataFrame): DataFrame created from returned list of dictionaries from `split_weather_line()`.
+        
     Returns:
-        list: A list of strings representing the weather forecast for each day.
+        plot_filename (str): String of filename to save line plot as.
     """
-    url = f"https://weather.com/weather/tenday/l/{zip_code}"
-    response = requests.get(url)
-    response.raise_for_status()  # Raise an exception for bad status codes
-
-    soup = BeautifulSoup(response.content, "html.parser")
-
-    forecast_container = soup.find("div", class_=(re.compile("DailyForecast--DisclosureList")))
-
-    forecasts = []
-    for detail in forecast_container.find_all("details"):
-        forecast_text = detail.find("div", class_=(re.compile("DetailsSummary"))).text
-        forecasts.append(forecast_text)
-    return forecasts
-
-
-def analyze_weather_data(df):
+    
     print("\nData Analysis:")
     print(df.describe())
     
@@ -113,7 +149,7 @@ if __name__ == "__main__":
         forecasts = get_weather_forecast(zip_code)
         parsed_forecasts = split_weather_line(forecasts)
         
-        # Create DataFrame
+        # Create DataFrame 
         df = pd.DataFrame(parsed_forecasts)
         
         # Display DataFrame
@@ -123,7 +159,7 @@ if __name__ == "__main__":
         # Analyze data and get plot filename
         plot_filename = analyze_weather_data(df)
         
-        # Save to CSV with dynamic filename
+        # Save plot and weather data as dynamic PNG and CSV files respectively
         current_date = datetime.now().strftime("%Y%m%d")
         csv_filename = f"weather_forecast_{zip_code}_{current_date}.csv"
         df.to_csv(csv_filename, index=False)
