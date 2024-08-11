@@ -108,15 +108,12 @@ def split_weather_line(forecasts):
 
     return results
 
-def analyze_weather_data(df, zip_code):
+def analyze_weather_data(df):
     """
     Analyzes numerical weather data and generates a line graph of high/low temperatures from a DataFrame of the weather data.
 
     Args:
         df (DataFrame): DataFrame created from returned list of dictionaries from `split_weather_line()`.
-        
-    Returns:
-        plot_filename (str): String of filename to save line plot as.
     """
     print("\nData Analysis:")
     print(df.describe())
@@ -125,27 +122,35 @@ def analyze_weather_data(df, zip_code):
     correlation_matrix = df[['high_temp', 'low_temp', 'wind_speed', 'rain_chance']].corr()
     print(correlation_matrix)
     
-    # Plotting temperature range with shaded area and grid
+def plot_weather_data(df):
+    """
+    Creates a matplotlip line graph of high and low temperatures extracted from weather data DataFrame
+
+    Args:
+        df (DataFrame): DataFrame created from returned list of dictionaries from `split_weather_line()`.
+    """
     plt.figure(figsize=(12, 6))
     plt.plot(df['date'], df['high_temp'], label='High Temp', color='red')
     plt.plot(df['date'], df['low_temp'], label='Low Temp', color='blue')
     plt.fill_between(df['date'], df['high_temp'], df['low_temp'], alpha=0.2)
-    plt.title(f'Temperature Range Over Time for {zip_code}')
+    plt.title('Temperature Range Over Time')
     plt.xlabel('Date')
     plt.ylabel('Temperature (°F)')
     plt.legend()
     plt.grid(True, linestyle='--', alpha=0.7)
     plt.xticks(rotation=45)
     plt.tight_layout()
-    
-    # Save the plot as an image
-    current_date = datetime.now().strftime("%Y%m%d")
-    plot_filename = f"temperature_plot_{zip_code}_{current_date}.png"
-    plot_path = os.path.join('output', 'plots', plot_filename)
-    plt.savefig(plot_path)
-    plt.close()
-    
-    return plot_filename
+
+    # Save plot to a BytesIO object
+    img = io.BytesIO()
+    plt.savefig(img, format='png')
+    plt.close(img)
+
+    # Encode image to base64
+    img.seek(0)
+    plot_url = base64.b64encode(img.getvalue()).decode('utf8')
+
+    return plot_url
 
 def get_weather_data(zip_code):
     """
@@ -156,8 +161,6 @@ def get_weather_data(zip_code):
         
     Returns:
         df (DataFrame): Reformatted weather data as a Pandas DataFrame.
-        plot_filename (str): Saved plot file name.
-        csv_filename (str): Saved CSV file name.
     """
     try:
         forecasts = get_weather_forecast(zip_code)
@@ -166,17 +169,11 @@ def get_weather_data(zip_code):
         # Create DataFrame
         df = pd.DataFrame(parsed_forecasts)
         
-        # Analyze data and get plot filename
-        plot_filename = analyze_weather_data(df, zip_code)
-        
-        # Save to CSV with dynamic filename
-        current_date = datetime.now().strftime("%Y%m%d")
-        csv_filename = f"weather_forecast_{zip_code}_{current_date}.csv"
-        csv_path = os.path.join('output', 'csv', csv_filename)
-        df.to_csv(csv_path, index=False)
-        
-        return df, plot_filename, csv_filename
+        # Plot data and get base64 encoded image
+        # plot_url = plot_weather_data(df)
+        return df
+        # return df, plot_url
         
     except Exception as e:
         print(f"Error: {str(e)}")
-        return None, None, None
+        return None, None
