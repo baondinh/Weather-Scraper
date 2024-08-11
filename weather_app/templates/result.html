@@ -13,12 +13,7 @@
             {{ data|safe }}
         </div>
         <div class="forecast-plot">
-            <!-- <img src="{{ url_for('static', filename='plots/' + plot) }}" alt="Temperature Plot"> -->
-            <img src="{{ url_for('output', filename='plots/' + plot) }}" alt="Temperature Plot">
-        </div>
-        <div class="download-links">
-            <a href="{{ url_for('download_file', filename=csv) }}" class="download-link">Download CSV</a>
-            <a href="{{ url_for('download_file', filename=plot) }}" class="download-link">Download Plot</a>
+            <!-- <img src="data:image/png;base64,{{ plot_url }}" alt="Temperature Plot"> -->
         </div>
         <a href="/" class="back-link">Back to Search</a>
     </div>
