@@ -5,14 +5,17 @@ Adapted to work with Flask
 
 '''
 
+
 import requests
 from bs4 import BeautifulSoup
 import re
 import pandas as pd
 import matplotlib.pyplot as plt
+from datetime import datetime
+import os
 
 __author__ = "Bao Dinh"
-__version__ = "1.0.1"
+__version__ = "2.0.1"
 __maintainer__ = "Bao Dinh"
 __email__ = "baondinh@bu.edu"
 
@@ -51,7 +54,7 @@ def split_weather_line(forecasts):
     Returns:
         results (list): A list of dictionaries with weather information for daily forecasts.
     """
-    
+
     # Weather options for use with f-string regex
     wind_direction_options = "N|NNE|NE|ENE|E|ESE|SE|SSE|S|SSW|SW|WSW|W|WNW|NW|NNW"
     condition_options = "Mostly Sunny|Sunny|Partly Cloudy|Mostly Cloudy|Scattered Showers|Few Showers|Showers|Light Rain|Rain and Snow|Rain|Snow|Thunderstorms|Scattered Thunderstorms|Thunderstorms Early"
@@ -105,7 +108,7 @@ def split_weather_line(forecasts):
 
     return results
 
-def analyze_weather_data(df):
+def analyze_weather_data(df, zip_code):
     """
     Analyzes numerical weather data and generates a line graph of high/low temperatures from a DataFrame of the weather data.
 
@@ -115,7 +118,6 @@ def analyze_weather_data(df):
     Returns:
         plot_filename (str): String of filename to save line plot as.
     """
-    
     print("\nData Analysis:")
     print(df.describe())
     
@@ -128,7 +130,7 @@ def analyze_weather_data(df):
     plt.plot(df['date'], df['high_temp'], label='High Temp', color='red')
     plt.plot(df['date'], df['low_temp'], label='Low Temp', color='blue')
     plt.fill_between(df['date'], df['high_temp'], df['low_temp'], alpha=0.2)
-    plt.title('Temperature Range Over Time')
+    plt.title(f'Temperature Range Over Time for {zip_code}')
     plt.xlabel('Date')
     plt.ylabel('Temperature (°F)')
     plt.legend()
@@ -136,35 +138,45 @@ def analyze_weather_data(df):
     plt.xticks(rotation=45)
     plt.tight_layout()
     
-    # Save the plot as an image with dynamic filename
-    plot_filename = f"temperature_plot_{zip_code}_{datetime.now().strftime('%Y%m%d')}.png"
-    plt.savefig(plot_filename)
+    # Save the plot as an image
+    current_date = datetime.now().strftime("%Y%m%d")
+    plot_filename = f"temperature_plot_{zip_code}_{current_date}.png"
+    plot_path = os.path.join('output', 'plots', plot_filename)
+    plt.savefig(plot_path)
     plt.close()
     
     return plot_filename
 
-if __name__ == "__main__":
-    zip_code = input("Enter 5-digit zip code: ")
+def get_weather_data(zip_code):
+    """
+    Makes calls to other functions to obtain weather data, parse weather data, and reformat data as a Pandas DataFrame.
+
+    Args:
+        zip_code (int): ZIP code to obtain weather data from weather.com instead of user ZIP code input.
+        
+    Returns:
+        df (DataFrame): Reformatted weather data as a Pandas DataFrame.
+        plot_filename (str): Saved plot file name.
+        csv_filename (str): Saved CSV file name.
+    """
     try:
         forecasts = get_weather_forecast(zip_code)
         parsed_forecasts = split_weather_line(forecasts)
         
-        # Create DataFrame 
+        # Create DataFrame
         df = pd.DataFrame(parsed_forecasts)
         
-        # Display DataFrame
-        print("\nWeather Forecast DataFrame:")
-        print(df)
-        
         # Analyze data and get plot filename
-        plot_filename = analyze_weather_data(df)
+        plot_filename = analyze_weather_data(df, zip_code)
         
-        # Save plot and weather data as dynamic PNG and CSV files respectively
+        # Save to CSV with dynamic filename
         current_date = datetime.now().strftime("%Y%m%d")
         csv_filename = f"weather_forecast_{zip_code}_{current_date}.csv"
-        df.to_csv(csv_filename, index=False)
-        print(f"\nData saved to {csv_filename}")
-        print(f"Plot saved as {plot_filename}")
+        csv_path = os.path.join('output', 'csv', csv_filename)
+        df.to_csv(csv_path, index=False)
+        
+        return df, plot_filename, csv_filename
         
     except Exception as e:
         print(f"Error: {str(e)}")
+        return None, None, None
