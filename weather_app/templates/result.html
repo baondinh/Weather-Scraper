@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Forecast Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Weather Forecast Results for {{ zip_code }}</h1>
+        <div class="forecast-data">
+            {{ data|safe }}
+        </div>
+        <div class="forecast-plot">
+            <!-- <img src="{{ url_for('static', filename='plots/' + plot) }}" alt="Temperature Plot"> -->
+            <img src="{{ url_for('output', filename='plots/' + plot) }}" alt="Temperature Plot">
+        </div>
+        <div class="download-links">
+            <a href="{{ url_for('download_file', filename=csv) }}" class="download-link">Download CSV</a>
+            <a href="{{ url_for('download_file', filename=plot) }}" class="download-link">Download Plot</a>
+        </div>
+        <a href="/" class="back-link">Back to Search</a>
+    </div>
+</body>
+</html>
