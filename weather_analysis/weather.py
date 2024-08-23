@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 import re
 import pandas as pd
 import matplotlib.pyplot as plt
+import datetime
 
 __author__ = "Bao Dinh"
 __version__ = "1.0.1"
