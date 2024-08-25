@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Weather Forecast</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Dynamic Weather Forecast</h1>
+        </header>
+        <main>
+            <div class="content-left">
+                <h2>Weather Forecast</h2>
+                <div class="table-container">
+                    <table id="weather-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Condition</th>
+                                <th>High Temp</th>
+                                <th>Low Temp</th>
+                                <th>Wind Direction</th>
+                                <th>Wind Speed</th>
+                                <th>Rain Chance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="weather-data">
+                            <!-- Data will be dynamically inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="content-right">
+                <h2>Right Content</h2>
+                <div class="image-placeholder">
+                    <img src="temperature_plot.png" alt="Placeholder Image">
+                </div>
+                <p>This is the right side of the content area.</p>
+            </div>
+        </main>
+    </div>
+    <input type="file" id="csv-file" accept=".csv">
+    <script src="script.js"></script>
+</body>
+</html>
