@@ -1,0 +1,86 @@
+header {
+    background-color: #FF9AA2;
+    text-align: center;
+    padding: 1rem;
+}
+
+/* Main content area */
+main {
+    display: flex;
+    flex-grow: 1;
+    background-color: #FFDAC1;
+    overflow: hidden;
+}
+
+/* Left and right content columns */
+.content-left,
+.content-right {
+    width: 50%;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.content-left {
+    background-color: #B5EAD7;
+}
+
+.content-right {
+    background-color: #C7CEEA;
+}
+
+/* Table styles */
+.table-container {
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+th, td {
+    padding: 0.5rem;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+thead {
+    position: sticky;
+    top: 0;
+    background-color: #f2f2f2;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Image placeholder styles */
+.image-placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem 0;
+}
+
+.image-placeholder img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Add some basic styling to content */
+h1, h2 {
+    margin-bottom: 0.5rem;
+}
+
+p {
+    margin-bottom: 1rem;
+}
+
+/* File input styles */
+#csv-file {
+    margin: 1rem;
+}

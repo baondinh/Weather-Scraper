@@ -1,0 +1,16 @@
+date,condition,high_temp,low_temp,wind_direction,wind_speed,rain_chance
+Today,Partly Cloudy,35,23,WNW,19,2
+Wed 08,Partly Cloudy,33,21,WNW,18,4
+Thu 09,Sunny,33,21,NW,22,2
+Fri 10,Mostly Cloudy,33,25,WNW,9,6
+Sat 11,Snow,38,23,NW,12,39
+Sun 12,Sunny,37,20,WNW,9,5
+Mon 13,Partly Cloudy,42,26,W,8,7
+Tue 14,Mostly Sunny,38,19,W,12,5
+Wed 15,Mostly Sunny,30,19,WNW,12,4
+Thu 16,Partly Cloudy,27,19,WNW,12,18
+Fri 17,Mostly Sunny,31,18,WNW,11,8
+Sat 18,Partly Cloudy,35,25,WSW,9,24
+Sun 19,Snow,42,27,WSW,9,33
+Mon 20,Mostly Cloudy,38,25,W,9,24
+Tue 21,Partly Cloudy,36,23,W,12,24
