@@ -5,3 +5,5 @@ Uses pandas DataFrames to help organize information
 Extra features: 
 - Generate CSV file with organized weather data from pandas DataFrames
 - Generate weather plot showing 10-day temperature forecast for a given zip code
+
+![Alt text](sampleweatherplot.png?raw=true "Sample Temperature")
