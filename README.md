@@ -6,4 +6,9 @@ Extra features:
 - Generate CSV file with organized weather data from pandas DataFrames
 - Generate weather plot showing 10-day temperature forecast for a given zip code
 
+Further Ideas to Explore: 
+- Visualization using Tableau
+- Further data analysis with numpy and pandas
+- API implementation
+- Energy analysis for certain weather patterns
 ![Alt text](sampleweatherplot.png?raw=true "Sample Temperature")
