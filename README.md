@@ -12,3 +12,6 @@ Further Ideas to Explore:
 - API implementation
 - Energy analysis for certain weather patterns
 ![Alt text](sampleweatherplot.png?raw=true "Sample Temperature")
+
+
+- Shown on dev site, need to update this repo README
