@@ -4,36 +4,23 @@ This project combines weather data retrieval, parsing, and visualization into a 
 
 Key Features:
 
-    Web Scraping: Uses requests and BeautifulSoup to scrape 10-day forecast data from weather.com.
-
-    Regex Parsing: Extracts relevant forecast details (temperature, wind, conditions, etc.) using regular expressions for flexible and robust pattern matching.
-
-    Data Analysis with Pandas: Converts raw forecast data into a DataFrame for easy exploration and statistical analysis.
-
-    Data Visualization with Matplotlib: Generates a temperature range plot showing high/low temps over time, saved as a .png image.
-
-    Validation & Error Handling: Includes ZIP code format validation and error logging for robust runtime behavior.
-
-    CSV Export: Saves cleaned and structured weather data to a dynamically named .csv file for reuse.
+- Web Scraping: Uses requests and BeautifulSoup to scrape 10-day forecast data from weather.com.
+- Regex Parsing: Extracts relevant forecast details (temperature, wind, conditions, etc.) using regular expressions for flexible and robust pattern matching.
+- Data Analysis with Pandas: Converts raw forecast data into a DataFrame for easy exploration and statistical analysis.
+- Data Visualization with Matplotlib: Generates a temperature range plot showing high/low temps over time, saved as a .png image.
+- Validation & Error Handling: Includes ZIP code format validation and error logging for robust runtime behavior.
+- CSV Export: Saves cleaned and structured weather data to a dynamically named .csv file for reuse.
 
 File Outputs: 
+- weather_forecast_[ZIP_CODE]_[DATE].csv --> Summarized data from pandas DataFrame
+- temperature_plot_[ZIP_CODE]_[DATE].png --> Line graph showing high and low temperatures with shaded range of temperatures for the 10 days
 
-    weather_forecast_[ZIP_CODE]_[DATE].csv --> Summarized data from pandas DataFrame
-
-    temperature_plot_[ZIP_CODE]_[DATE].png --> Line graph showing high and low temperatures with shaded range of temperatures for the 10 days
-
-
-# Weather Scraper
-Practice using bs4 library to extract weather data from weather.com HTML
-Uses regex to parse extracted data 
-Uses pandas DataFrames to help organize information
-Extra features: 
-- Generate CSV file with organized weather data from pandas DataFrames
-- Generate weather plot showing 10-day temperature forecast for a given zip code
+Example Visualization: 
+![Alt text](sampleweatherplot.png?raw=true "Sample Temperature")
 
 Further Ideas to Explore: 
 - Visualization using Tableau
 - Further data analysis with numpy and pandas
 - API implementation
 - Energy analysis for certain weather patterns
-![Alt text](sampleweatherplot.png?raw=true "Sample Temperature")
+- Using CSV file with other applications like Tableau
