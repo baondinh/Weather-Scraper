@@ -24,3 +24,6 @@ Further Ideas to Explore:
 - API implementation
 - Energy analysis for certain weather patterns
 - Using CSV file with other applications like Tableau
+
+
+Most current version: 0.9.2 is a working consolidated script. Currently attempting to create API endpoints and integrate with website playground
